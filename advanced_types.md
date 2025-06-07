@@ -20,6 +20,12 @@
   * [ReturnType](#returntype)
   * [Awaited](#awaited)
   * [Record](#record)
+  * [NonNullable](#nonnullable)
+  * [Exclude](#exclude)
+  * [Extract](#extract)
+  * [Parameters](#parameters)
+  * [ConstructorParameters](#constructorparameters)
+  * [InstanceType](#instancetype)
 
 <!-- tocstop -->
 
@@ -728,3 +734,63 @@ Extending `<ButtonHTMLAttributes<HTMLButtonElement>` (where `ButtonHTMLAttribute
 ```
 
 Lastly, I'm omitting the color attribute from the `ButtonHTMLAttributes` because technically the color attribute is deprecated and I happen to be using it differently, as in I am accepting a string or and array of strings so I need to override the old one for typescript to stfu.
+
+### NonNullable<Type>
+
+Removes `null` and `undefined` from a type.
+
+```typescript
+type MaybeUser = string | null | undefined;
+type User = NonNullable<MaybeUser>; // string
+```
+
+### Exclude<UnionType, ExcludedMembers>
+
+Constructs a type by excluding from `UnionType` all union members that are assignable to `ExcludedMembers`.
+
+```typescript
+type Letters = 'a' | 'b' | 'c';
+type T0 = Exclude<Letters, 'a'>;
+// type T0 = 'b' | 'c'
+```
+
+### Extract<Type, Union>
+
+Constructs a type by extracting from `Type` all union members that are assignable to `Union`.
+
+```typescript
+type Letters = 'a' | 'b' | 'c';
+type T1 = Extract<Letters, 'a' | 'd'>;
+// type T1 = 'a'
+```
+
+### Parameters<Type>
+
+Extracts the parameter types of a function as a tuple.
+
+```typescript
+function greet(name: string, age: number) {}
+type GreetParams = Parameters<typeof greet>;
+// type GreetParams = [string, number]
+```
+
+### ConstructorParameters<Type>
+
+Extracts the types of a constructor's parameters from a class type.
+
+```typescript
+class Person {
+  constructor(public name: string, public age: number) {}
+}
+type PersonParams = ConstructorParameters<typeof Person>;
+// type PersonParams = [string, number]
+```
+
+### InstanceType<Type>
+
+Extracts the instance type from a class constructor type.
+
+```typescript
+type PersonInstance = InstanceType<typeof Person>;
+// type PersonInstance = Person
+```
